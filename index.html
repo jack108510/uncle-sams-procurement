@@ -4,276 +4,568 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Uncle Sam's Procurement</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#1d4ed8;--dark:#0f172a;--card:#1e293b;--accent:#f59e0b;--red:#ef4444;--green:#10b981;--text:#f8fafc;--muted:#94a3b8;--border:#334155}
-body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
-a{color:var(--primary);text-decoration:none}
-button{cursor:pointer;font-family:inherit}
-.nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2rem;height:64px;position:sticky;top:0;z-index:100}
-.nav-logo{font-weight:700;font-size:1.15rem;color:var(--text);white-space:nowrap}
-.nav-links{display:flex;gap:0}
-.nav-links a{padding:0 1rem;height:64px;display:flex;align-items:center;color:var(--muted);font-size:.9rem;font-weight:500;border-bottom:2px solid transparent;transition:all .2s}
-.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--primary)}
-.container{max-width:1200px;margin:0 auto;padding:2rem;width:100%;flex:1}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem}
-.kpi-label{font-size:.8rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
-.kpi-value{font-size:1.75rem;font-weight:700;margin-top:.25rem}
-.kpi-value.blue{color:var(--primary)}
-.kpi-value.gold{color:var(--accent)}
-.kpi-value.green{color:var(--green)}
-.kpi-value.red{color:var(--red)}
-.section-title{font-size:1.1rem;font-weight:600;margin-bottom:1rem}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem;margin-bottom:2rem}
-.opp-card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-.opp-card h3{font-size:.95rem;font-weight:600}
-.opp-card .meta{font-size:.8rem;color:var(--muted)}
-.opp-card .value{font-size:1rem;font-weight:600;color:var(--accent)}
-.opp-card .btn{display:inline-block;margin-top:auto;padding:.4rem .9rem;background:var(--primary);color:var(--text);border:none;border-radius:.4rem;font-size:.8rem;font-weight:500;text-align:center;transition:background .2s}
-.opp-card .btn:hover{background:#2563eb}
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
-.chart-box{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem}
-.chart-box h3{font-size:.9rem;font-weight:600;margin-bottom:1rem}
-.bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;font-size:.75rem}
-.bar-label{width:100px;text-align:right;color:var(--muted);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.bar-track{flex:1;height:22px;background:var(--dark);border-radius:4px;overflow:hidden;position:relative}
-.bar-fill{height:100%;background:var(--primary);border-radius:4px;transition:width .4s;display:flex;align-items:center;padding-left:6px;font-size:.7rem;color:var(--text);font-weight:500;min-width:fit-content}
-.bar-fill.gold{background:var(--accent)}
-.filters{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem;align-items:center}
-.filters input,.filters select{background:var(--dark);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;border-radius:.4rem;font-size:.85rem;font-family:inherit}
-.filters input{min-width:220px}
-table{width:100%;border-collapse:collapse;font-size:.85rem}
-thead th{text-align:left;padding:.6rem .5rem;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;user-select:none;white-space:nowrap}
-thead th:hover{color:var(--text)}
-tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer}
-tbody tr:hover{background:rgba(29,78,216,.1)}
-tbody td{padding:.6rem .5rem;vertical-align:top}
-.expand-row td{padding:0 .5rem .6rem 2rem;color:var(--muted);font-size:.8rem;border-bottom:1px solid var(--border)}
-.btn-sm{padding:.3rem .65rem;background:var(--primary);color:var(--text);border:none;border-radius:.3rem;font-size:.75rem;font-weight:500;transition:background .2s}
-.btn-sm:hover{background:#2563eb}
-.sort-arrow{font-size:.65rem;margin-left:2px;opacity:.5}
-.sort-arrow.active{opacity:1}
-.about-content{max-width:700px}
-.about-content h2{font-size:1.15rem;font-weight:600;margin:1.5rem 0 .5rem}
-.about-content p{color:var(--muted);line-height:1.6;margin-bottom:.75rem}
-.footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:auto}
-.hidden{display:none!important}
-@media(max-width:768px){
-  .nav{padding:0 1rem;gap:1rem}
-  .nav-logo{font-size:1rem}
-  .nav-links a{padding:0 .6rem;font-size:.8rem}
-  .container{padding:1rem}
-  .charts-grid{grid-template-columns:1fr}
-  .card-grid{grid-template-columns:1fr}
-  .bar-label{width:70px;font-size:.65rem}
-  table{font-size:.75rem}
-  thead th,tbody td{padding:.4rem .3rem}
-  .filters input{min-width:160px}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #1d4ed8;
+  --primary-hover: #2563eb;
+  --dark: #0f172a;
+  --card: #1e293b;
+  --card-border: #334155;
+  --accent: #f59e0b;
+  --red: #ef4444;
+  --green: #10b981;
+  --text: #f8fafc;
+  --text-dim: #94a3b8;
+  --bg: #0b1120;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Nav */
+nav {
+  background: var(--dark);
+  border-bottom: 1px solid var(--card-border);
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+nav .nav-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+nav .logo {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+nav .logo span { color: var(--accent); }
+nav .nav-links { display: flex; gap: 0.25rem; }
+nav .nav-links a {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+nav .nav-links a:hover, nav .nav-links a.active {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+  text-decoration: none;
+}
+
+/* Container */
+.container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+.view { display: none; }
+.view.active { display: block; }
+
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.kpi-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.kpi-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+.kpi-label { font-size: 0.8rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+.kpi-value { font-size: 2rem; font-weight: 800; margin-top: 0.25rem; }
+.kpi-value.blue { color: var(--primary-hover); }
+.kpi-value.amber { color: var(--accent); }
+.kpi-value.green { color: var(--green); }
+.kpi-value.red { color: var(--red); }
+
+/* Section */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Digest Cards */
+.digest-grid { display: grid; gap: 1rem; margin-bottom: 2rem; }
+.digest-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  transition: border-color 0.2s;
+}
+.digest-card:hover { border-color: var(--primary); }
+.digest-card .title { font-weight: 600; font-size: 1rem; }
+.digest-card .agency { color: var(--text-dim); font-size: 0.85rem; margin-top: 0.15rem; }
+.digest-card .meta { display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-dim); }
+.digest-card .meta span { display: flex; align-items: center; gap: 0.3rem; }
+.btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-outline { background: transparent; color: var(--text-dim); border: 1px solid var(--card-border); }
+.btn-outline:hover { border-color: var(--text-dim); color: var(--text); }
+
+/* Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.chart-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.chart-card h3 { font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; }
+.bar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+.bar-label { font-size: 0.75rem; color: var(--text-dim); min-width: 160px; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 24px; background: rgba(255,255,255,0.05); border-radius: 6px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 0.5rem; }
+.bar-fill.blue { background: var(--primary); }
+.bar-fill.amber { background: var(--accent); }
+.bar-count { font-size: 0.75rem; color: var(--text-dim); min-width: 30px; }
+
+/* Table */
+.table-controls {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.table-controls input, .table-controls select {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+.table-controls input { flex: 1; min-width: 200px; }
+.table-controls input:focus, .table-controls select:focus { outline: none; border-color: var(--primary); }
+.table-wrap {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+  font-weight: 600;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+thead th:hover { color: var(--text); }
+thead th .sort-arrow { margin-left: 0.25rem; font-size: 0.65rem; }
+tbody tr { border-bottom: 1px solid rgba(255,255,255,0.03); transition: background 0.15s; }
+tbody tr:hover { background: rgba(255,255,255,0.03); }
+tbody td { padding: 0.75rem 1rem; font-size: 0.85rem; }
+.deadline-urgent { color: var(--red); font-weight: 600; }
+.deadline-soon { color: var(--accent); }
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: rgba(29,78,216,0.2);
+  color: #93bbfd;
+  white-space: nowrap;
+}
+.badge.set-aside { background: rgba(16,185,129,0.15); color: #6ee7b7; }
+
+/* About */
+.about-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 700px;
+}
+.about-card h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+.about-card p { color: var(--text-dim); margin-bottom: 1rem; }
+.about-card ul { color: var(--text-dim); padding-left: 1.5rem; margin-bottom: 1rem; }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--card-border);
+  margin-top: 2rem;
+}
+
+/* Updated banner */
+.update-banner {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 1rem; }
+  .charts-grid { grid-template-columns: 1fr; }
+  .digest-card { grid-template-columns: 1fr; }
+  nav .nav-links { gap: 0; }
+  nav .nav-links a { padding: 0.5rem 0.5rem; font-size: 0.8rem; }
+  .bar-label { min-width: 100px; font-size: 0.65rem; }
+  .table-controls { flex-direction: column; }
+  .table-controls input { min-width: auto; width: 100%; }
 }
 </style>
 </head>
 <body>
-<nav class="nav">
-  <div class="nav-logo">Uncle Sam's Procurement</div>
-  <div class="nav-links">
-    <a href="#/" data-nav="dashboard">Dashboard</a>
-    <a href="#/opportunities" data-nav="opportunities">Opportunities</a>
-    <a href="#/about" data-nav="about">About</a>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Uncle Sam's <span>Procurement</span></div>
+    <div class="nav-links">
+      <a href="#" onclick="showView('dashboard')" class="active" data-view="dashboard">Dashboard</a>
+      <a href="#" onclick="showView('opportunities')" data-view="opportunities">Opportunities</a>
+      <a href="#" onclick="showView('digest')" data-view="digest">Digest</a>
+      <a href="#" onclick="showView('about')" data-view="about">About</a>
+    </div>
   </div>
 </nav>
 
-<div class="container" id="app"></div>
+<div class="container">
 
-<footer class="footer">Powered by SAM.gov API | Updated daily | 2026 Uncle Sam's Procurement</footer>
+  <!-- Dashboard -->
+  <div id="view-dashboard" class="view active">
+    <div class="update-banner">Last updated: <span id="last-updated"></span></div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Active Opportunities</div>
+        <div class="kpi-value blue" id="kpi-total">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Agencies</div>
+        <div class="kpi-value amber" id="kpi-agencies">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Small Business Set-Aside</div>
+        <div class="kpi-value green" id="kpi-sba">0</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Closing This Week</div>
+        <div class="kpi-value red" id="kpi-closing">0</div>
+      </div>
+    </div>
+
+    <div class="section-title">Top Opportunities</div>
+    <div class="digest-grid" id="dashboard-digest"></div>
+
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>Opportunities by Agency</h3>
+        <div id="chart-agency"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Opportunities by NAICS Sector</h3>
+        <div id="chart-naics"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Opportunities -->
+  <div id="view-opportunities" class="view">
+    <div class="update-banner">Last updated: <span id="last-updated-2"></span></div>
+    <div class="table-controls">
+      <input type="text" id="search" placeholder="Search opportunities...">
+      <select id="filter-agency"><option value="">All Agencies</option></select>
+      <select id="filter-naics"><option value="">All NAICS</option></select>
+      <select id="filter-setaside"><option value="">All Set-Aside</option></select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="sortTable('title')">Title <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('agency')">Agency <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('postedDate')">Posted <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('responseDeadline')">Deadline <span class="sort-arrow"></span></th>
+            <th onclick="sortTable('naicsCode')">NAICS <span class="sort-arrow"></span></th>
+            <th>Set-Aside</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:1rem;color:var(--text-dim);font-size:0.8rem;" id="table-count"></div>
+  </div>
+
+  <!-- Digest -->
+  <div id="view-digest" class="view">
+    <div class="section-title">Daily Top 5 Digest</div>
+    <div class="digest-grid" id="digest-list"></div>
+    <div style="margin-top:1.5rem;">
+      <button class="btn btn-outline" onclick="alert('Subscribe feature coming soon.')">Subscribe to Daily Alerts</button>
+    </div>
+  </div>
+
+  <!-- About -->
+  <div id="view-about" class="view">
+    <div class="about-card">
+      <h2>Uncle Sam's Procurement</h2>
+      <p><strong>Government contracts, simplified.</strong></p>
+      <p>This tool automatically scans SAM.gov for active federal solicitations and presents them in an easy-to-browse dashboard. Updated daily with fresh opportunities.</p>
+      <ul>
+        <li>Active solicitations from the past 7 days</li>
+        <li>Filtered for small business opportunities</li>
+        <li>Searchable by agency, NAICS code, and set-aside type</li>
+        <li>Direct links to full SAM.gov postings</li>
+      </ul>
+      <p>Powered by the <a href="https://sam.gov" target="_blank">SAM.gov API</a>.</p>
+    </div>
+  </div>
+
+</div>
+
+<footer>Uncle Sam's Procurement &mdash; Government contracts, simplified.</footer>
 
 <script src="data.js"></script>
 <script>
-const app=document.getElementById('app');
-let sortCol='deadline',sortDir=1;
+// State
+let sortKey = 'postedDate';
+let sortDir = -1;
 
-function $(s,p){return(p||document).querySelector(s)}
-function $$(s,p){return[...(p||document).querySelectorAll(s)]}
-function fmt(n){return n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1e3?'$'+(n/1e3).toFixed(0)+'K':'$'+n}
-function fmtDate(d){if(!d)return'N/A';const dt=new Date(d+'T00:00:00');return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
-
-function closingThisWeek(){
-  const now=new Date(),wk=new Date(now.getTime()+7*864e5);
-  return OPPORTUNITIES.filter(o=>{const d=new Date(o.deadline+'T00:00:00');return d>=now&&d<=wk}).length;
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.classList.toggle('active', a.dataset.view === name);
+  });
+  return false;
 }
 
-function dashboard(){
-  const totalHigh=OPPORTUNITIES.reduce((s,o)=>s+o.value_high,0);
-  const avgVal=OPPORTUNITIES.reduce((s,o)=>s+(o.value_low+o.value_high)/2,0)/OPPORTUNITIES.length;
-  const closing=closingThisWeek();
+function fmtDate(d) {
+  if (!d) return '--';
+  try { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+  catch { return d; }
+}
 
-  // Value range chart data
-  const ranges=[['Under $25K',0,25000],['$25K-$50K',25000,50000],['$50K-$75K',50000,75000],['$75K-$100K',75000,Infinity]];
-  const rangeCounts=ranges.map(([label,lo,hi])=>({label,count:OPPORTUNITIES.filter(o=>o.value_low>=lo&&o.value_low<hi).length}));
-  const maxR=Math.max(...rangeCounts.map(r=>r.count),1);
+function deadlineClass(d) {
+  if (!d) return '';
+  const diff = (new Date(d) - new Date()) / 86400000;
+  if (diff < 3) return 'deadline-urgent';
+  if (diff < 7) return 'deadline-soon';
+  return '';
+}
 
-  // Agency chart data
-  const agencyMap={};
-  OPPORTUNITIES.forEach(o=>{agencyMap[o.agency]=(agencyMap[o.agency]||0)+1});
-  const agencyData=Object.entries(agencyMap).sort((a,b)=>b[1]-a[1]);
-  const maxA=Math.max(...agencyData.map(a=>a[1]),1);
+// KPIs
+function renderDashboard() {
+  document.getElementById('last-updated').textContent = LAST_UPDATED;
+  document.getElementById('last-updated-2').textContent = LAST_UPDATED;
+  document.getElementById('kpi-total').textContent = OPPORTUNITIES.length;
 
-  app.innerHTML=`
-  <div class="kpi-grid">
-    <div class="kpi"><div class="kpi-label">Active Opportunities</div><div class="kpi-value blue">${OPPORTUNITIES.length}</div></div>
-    <div class="kpi"><div class="kpi-label">Total Value</div><div class="kpi-value gold">${fmt(totalHigh)}</div></div>
-    <div class="kpi"><div class="kpi-label">Average Value</div><div class="kpi-value green">${fmt(Math.round(avgVal))}</div></div>
-    <div class="kpi"><div class="kpi-label">Closing This Week</div><div class="kpi-value red">${closing}</div></div>
-  </div>
-  <div class="section-title">Top Opportunities</div>
-  <div class="card-grid">
-    ${DIGEST.map(o=>`
-    <div class="opp-card">
-      <h3>${esc(o.title)}</h3>
-      <div class="meta">${esc(o.agency)} &middot; Deadline: ${fmtDate(o.deadline)}</div>
-      <div class="value">${fmt(o.value_low)} - ${fmt(o.value_high)}</div>
-      <a class="btn" href="${esc(o.url)}" target="_blank">View on SAM.gov</a>
-    </div>`).join('')}
-  </div>
-  <div class="charts-grid">
-    <div class="chart-box">
-      <h3>Opportunities by Value Range</h3>
-      ${rangeCounts.map(r=>`<div class="bar-row"><div class="bar-label">${r.label}</div><div class="bar-track"><div class="bar-fill" style="width:${(r.count/maxR*100).toFixed(1)}%">${r.count}</div></div></div>`).join('')}
+  const agencies = [...new Set(OPPORTUNITIES.map(o => o.agency).filter(Boolean))];
+  document.getElementById('kpi-agencies').textContent = agencies.length;
+
+  const sba = OPPORTUNITIES.filter(o => o.setAside).length;
+  document.getElementById('kpi-sba').textContent = sba;
+
+  const weekOut = new Date(); weekOut.setDate(weekOut.getDate() + 7);
+  const closing = OPPORTUNITIES.filter(o => o.responseDeadline && new Date(o.responseDeadline) <= weekOut).length;
+  document.getElementById('kpi-closing').textContent = closing;
+
+  // Digest cards
+  const dashDigest = document.getElementById('dashboard-digest');
+  dashDigest.innerHTML = DIGEST.map(o => `
+    <div class="digest-card">
+      <div>
+        <div class="title">${esc(o.title)}</div>
+        <div class="agency">${esc(o.agency)}</div>
+        <div class="meta">
+          <span>NAICS: ${o.naicsCode || '--'}</span>
+          <span>Deadline: ${fmtDate(o.responseDeadline)}</span>
+          ${o.setAside ? `<span class="badge set-aside">${esc(o.setAside.split('(')[0].trim())}</span>` : ''}
+        </div>
+      </div>
+      <a href="${o.uiLink}" target="_blank" class="btn btn-primary">View</a>
     </div>
-    <div class="chart-box">
-      <h3>Opportunities by Agency</h3>
-      ${agencyData.map(([name,count])=>`<div class="bar-row"><div class="bar-label" title="${esc(name)}">${esc(name)}</div><div class="bar-track"><div class="bar-fill gold" style="width:${(count/maxA*100).toFixed(1)}%">${count}</div></div></div>`).join('')}
-    </div>
-  </div>`;
-}
-
-function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-
-function opportunities(){
-  const agencies=[...new Set(OPPORTUNITIES.map(o=>o.agency))].sort();
-  const naics=[...new Set(OPPORTUNITIES.map(o=>o.naics))].sort();
-  const setasides=[...new Set(OPPORTUNITIES.filter(o=>o.setaside).map(o=>o.setaside))].sort();
-
-  app.innerHTML=`
-  <h2 style="margin-bottom:1rem">All Opportunities</h2>
-  <div class="filters">
-    <input type="text" id="search" placeholder="Search title, agency, NAICS...">
-    <select id="f-agency"><option value="">All Agencies</option>${agencies.map(a=>`<option>${esc(a)}</option>`).join('')}</select>
-    <select id="f-naics"><option value="">All NAICS</option>${naics.map(n=>`<option>${n}</option>`).join('')}</select>
-    <select id="f-setaside"><option value="">All Set-Asides</option>${setasides.map(s=>`<option>${esc(s)}</option>`).join('')}</select>
-    <select id="f-value"><option value="">Any Value</option><option value="0-25000">Under $25K</option><option value="25000-50000">$25K-$50K</option><option value="50000-75000">$50K-$75K</option><option value="75000-999999">$75K+</option></select>
-  </div>
-  <div style="overflow-x:auto">
-  <table>
-    <thead><tr>
-      <th data-col="title">Title <span class="sort-arrow" id="sa-title">&#9650;</span></th>
-      <th data-col="agency">Agency <span class="sort-arrow" id="sa-agency">&#9650;</span></th>
-      <th data-col="value_high">Value <span class="sort-arrow" id="sa-value_high">&#9650;</span></th>
-      <th data-col="posted">Posted <span class="sort-arrow" id="sa-posted">&#9650;</span></th>
-      <th data-col="deadline">Deadline <span class="sort-arrow" id="sa-deadline">&#9650;</span></th>
-      <th data-col="naics">NAICS <span class="sort-arrow" id="sa-naics">&#9650;</span></th>
-      <th data-col="setaside">Set-Aside</th>
-      <th></th>
-    </tr></thead>
-    <tbody id="tbody"></tbody>
-  </table>
-  </div>`;
-  renderTable();
-
-  $('#search').addEventListener('input',renderTable);
-  ['f-agency','f-naics','f-setaside','f-value'].forEach(id=>$('#'+id).addEventListener('change',renderTable));
-  $$('thead th[data-col]').forEach(th=>th.addEventListener('click',()=>{
-    const c=th.dataset.col;
-    if(sortCol===c)sortDir*=-1;else{sortCol=c;sortDir=1}
-    renderTable();
-  }));
-}
-
-function renderTable(){
-  const search=$('#search').value.toLowerCase();
-  const fAgency=$('#f-agency').value;
-  const fNaics=$('#f-naics').value;
-  const fSet=$('#f-setaside').value;
-  const fVal=$('#f-value').value;
-
-  let data=OPPORTUNITIES.filter(o=>{
-    if(search&&![o.title,o.agency,o.naics,o.naics_desc,o.description].some(s=>s&&s.toLowerCase().includes(search)))return false;
-    if(fAgency&&o.agency!==fAgency)return false;
-    if(fNaics&&o.naics!==fNaics)return false;
-    if(fSet&&o.setaside!==fSet)return false;
-    if(fVal){const[lo,hi]=fVal.split('-').map(Number);if(o.value_high<lo||o.value_low>hi)return false}
-    return true;
-  });
-
-  data.sort((a,b)=>{
-    let va=a[sortCol],vb=b[sortCol];
-    if(typeof va==='string')return va.localeCompare(vb)*sortDir;
-    return(va-vb)*sortDir;
-  });
-
-  // Update sort arrows
-  $$('thead th[data-col]').forEach(th=>{
-    const arrow=$(`#sa-${th.dataset.col}`);
-    if(!arrow)return;
-    arrow.classList.toggle('active',th.dataset.col===sortCol);
-    arrow.textContent=th.dataset.col===sortCol?(sortDir===1?'\u25B2':'\u25BC'):'\u25B2';
-  });
-
-  $('#tbody').innerHTML=data.map(o=>`
-    <tr data-id="${o.id}">
-      <td><strong>${esc(o.title)}</strong></td>
-      <td>${esc(o.agency)}</td>
-      <td>${fmt(o.value_low)} - ${fmt(o.value_high)}</td>
-      <td>${fmtDate(o.posted)}</td>
-      <td>${fmtDate(o.deadline)}</td>
-      <td>${o.naics}</td>
-      <td>${o.setaside?esc(o.setaside):'--'}</td>
-      <td><a class="btn-sm" href="${esc(o.url)}" target="_blank">View</a></td>
-    </tr>
-    <tr class="expand-row hidden" id="exp-${o.id}"><td colspan="8">${esc(o.description)}</td></tr>
   `).join('');
 
-  $$('#tbody tr[data-id]').forEach(tr=>tr.addEventListener('click',e=>{
-    if(e.target.closest('.btn-sm'))return;
-    const exp=$(`#exp-${tr.dataset.id}`);
-    exp.classList.toggle('hidden');
-  }));
+  // Charts
+  renderCharts();
 }
 
-function about(){
-  app.innerHTML=`
-  <div class="about-content">
-    <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:.25rem">About Uncle Sam's Procurement</h1>
-    <p style="color:var(--accent);margin-bottom:1.5rem">Government contracts, simplified.</p>
-    <p>Uncle Sam's Procurement is a daily-updated dashboard that surfaces active federal contracting opportunities from SAM.gov. It is designed for small businesses looking to break into government contracting without wading through complex procurement portals.</p>
-    <h2>How It Works</h2>
-    <p>Each day, our scraper pulls the latest opportunities from the SAM.gov API, filters for contracts under $100,000, and presents them in a clean, searchable interface. You can filter by agency, NAICS code, set-aside type, and value range to find the contracts that match your capabilities.</p>
-    <h2>Daily Updates</h2>
-    <p>Data is refreshed automatically every 24 hours. The "Closing This Week" indicator helps you prioritize time-sensitive bids. Last updated: ${fmtDate(LAST_UPDATED.split('T')[0])}.</p>
-    <h2>Data Source</h2>
-    <p>All opportunity data is sourced directly from the <a href="https://sam.gov" target="_blank" style="color:var(--primary)">SAM.gov</a> API (System for Award Management), the official U.S. government system for federal procurement.</p>
-    <h2>Disclaimer</h2>
-    <p>This tool is not affiliated with or endorsed by the U.S. federal government. Always verify opportunity details on SAM.gov before submitting bids.</p>
-  </div>`;
-}
-
-function route(){
-  const h=location.hash||'#/';
-  $$('.nav-links a').forEach(a=>{
-    a.classList.toggle('active',
-      (h==='#/'&&a.dataset.nav==='dashboard')||
-      (h==='#/opportunities'&&a.dataset.nav==='opportunities')||
-      (h==='#/about'&&a.dataset.nav==='about')
-    );
+function renderCharts() {
+  // Agency chart
+  const agencyCounts = {};
+  OPPORTUNITIES.forEach(o => {
+    const a = o.agency || 'Unknown';
+    // Shorten names
+    const short = a.replace('DEPARTMENT OF ', 'D.').replace('VETERANS AFFAIRS, DEPARTMENT OF', 'VA').replace('DEPT OF DEFENSE', 'DoD').replace('GENERAL SERVICES ADMINISTRATION', 'GSA').replace('DEPARTMENT OF HOMELAND SECURITY', 'DHS');
+    agencyCounts[short] = (agencyCounts[short] || 0) + 1;
   });
-  if(h==='#/opportunities')opportunities();
-  else if(h==='#/about')about();
-  else dashboard();
+  const sortedAgencies = Object.entries(agencyCounts).sort((a,b) => b[1] - a[1]).slice(0, 8);
+  const maxAgency = sortedAgencies[0]?.[1] || 1;
+  document.getElementById('chart-agency').innerHTML = sortedAgencies.map(([name, count]) => `
+    <div class="bar">
+      <div class="bar-label">${esc(name)}</div>
+      <div class="bar-track"><div class="bar-fill blue" style="width:${(count/maxAgency)*100}%">${count}</div></div>
+    </div>
+  `).join('');
+
+  // NAICS sector chart
+  const naicsCounts = {};
+  OPPORTUNITIES.forEach(o => {
+    const n = o.naicsCode ? o.naicsCode.substring(0, 2) : 'Unknown';
+    const labels = { '33': 'Manufacturing', '56': 'Admin/Support', ' '23': 'Construction', '54': 'Prof. Services', '81': 'Other Services', '32': 'Manufacturing' };
+    naicsCounts[n] = (naicsCounts[n] || 0) + 1;
+  });
+  const naicsLabels = { '33': 'Manufacturing (33xx)', '56': 'Admin & Support (56xx)', '23': 'Construction (23xx)', '54': 'Prof. Services (54xx)', '81': 'Other Services (81xx)', '32': 'Manufacturing (32xx)' };
+  const sortedNaics = Object.entries(naicsCounts).sort((a,b) => b[1] - a[1]);
+  const maxNaics = sortedNaics[0]?.[1] || 1;
+  document.getElementById('chart-naics').innerHTML = sortedNaics.map(([code, count]) => `
+    <div class="bar">
+      <div class="bar-label">${naicsLabels[code] || 'Sector ' + code}</div>
+      <div class="bar-track"><div class="bar-fill amber" style="width:${(count/maxNaics)*100}%">${count}</div></div>
+    </div>
+  `).join('');
 }
 
-window.addEventListener('hashchange',route);
-route();
+// Opportunities table
+function getFiltered() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const agency = document.getElementById('filter-agency').value;
+  const naics = document.getElementById('filter-naics').value;
+  const setaside = document.getElementById('filter-setaside').value;
+
+  return OPPORTUNITIES.filter(o => {
+    if (search && !o.title.toLowerCase().includes(search) && !o.agency.toLowerCase().includes(search) && !o.solicitationNumber.toLowerCase().includes(search)) return false;
+    if (agency && o.agency !== agency) return false;
+    if (naics && o.naicsCode !== naics) return false;
+    if (setaside === 'yes' && !o.setAside) return false;
+    if (setaside === 'no' && o.setAside) return false;
+    return true;
+  }).sort((a, b) => {
+    const va = a[sortKey] || '';
+    const vb = b[sortKey] || '';
+    return (va < vb ? -1 : va > vb ? 1 : 0) * sortDir;
+  });
+}
+
+function renderTable() {
+  const data = getFiltered();
+  document.getElementById('tbody').innerHTML = data.map(o => `
+    <tr>
+      <td><strong>${esc(o.title)}</strong><br><span style="font-size:0.75rem;color:var(--text-dim)">${esc(o.solicitationNumber)}</span></td>
+      <td>${esc(o.agency)}</td>
+      <td>${fmtDate(o.postedDate)}</td>
+      <td class="${deadlineClass(o.responseDeadline)}">${fmtDate(o.responseDeadline)}</td>
+      <td>${o.naicsCode || '--'}</td>
+      <td>${o.setAside ? '<span class="badge set-aside">' + esc(o.setAside.split('(')[0].trim()) + '</span>' : '--'}</td>
+      <td><a href="${o.uiLink}" target="_blank" class="btn btn-primary" style="font-size:0.75rem;padding:0.3rem 0.75rem;">View</a></td>
+    </tr>
+  `).join('');
+  document.getElementById('table-count').textContent = `Showing ${data.length} of ${OPPORTUNITIES.length} opportunities`;
+}
+
+function sortTable(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = key === 'postedDate' ? -1 : 1; }
+  renderTable();
+}
+
+function populateFilters() {
+  const agencies = [...new Set(OPPORTUNITIES.map(o => o.agency).filter(Boolean))].sort();
+  const naics = [...new Set(OPPORTUNITIES.map(o => o.naicsCode).filter(Boolean))].sort();
+  document.getElementById('filter-agency').innerHTML = '<option value="">All Agencies</option>' + agencies.map(a => `<option value="${esc(a)}">${esc(a)}</option>`).join('');
+  document.getElementById('filter-naics').innerHTML = '<option value="">All NAICS</option>' + naics.map(n => `<option value="${n}">${n}</option>`).join('');
+  document.getElementById('filter-setaside').innerHTML = '<option value="">All Set-Aside</option><option value="yes">Set-Aside Only</option><option value="no">No Set-Aside</option>';
+}
+
+function renderDigest() {
+  document.getElementById('digest-list').innerHTML = DIGEST.map((o, i) => `
+    <div class="digest-card" style="grid-template-columns:auto 1fr auto;">
+      <div style="font-size:1.5rem;font-weight:800;color:var(--primary);opacity:0.5;">${i + 1}</div>
+      <div>
+        <div class="title">${esc(o.title)}</div>
+        <div class="agency">${esc(o.agency)}</div>
+        <div class="meta">
+          <span>NAICS: ${o.naicsCode || '--'}</span>
+          <span>Posted: ${fmtDate(o.postedDate)}</span>
+          <span>Deadline: ${fmtDate(o.responseDeadline)}</span>
+          ${o.setAside ? `<span class="badge set-aside">${esc(o.setAside.split('(')[0].trim())}</span>` : ''}
+        </div>
+        ${o.contacts && o.contacts.length ? `<div class="meta" style="margin-top:0.4rem"><span>Contact: ${esc(o.contacts[0].name)}</span>${o.contacts[0].email ? `<span>${esc(o.contacts[0].email)}</span>` : ''}</div>` : ''}
+      </div>
+      <a href="${o.uiLink}" target="_blank" class="btn btn-primary">View</a>
+    </div>
+  `).join('');
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// Event listeners
+document.getElementById('search').addEventListener('input', renderTable);
+document.getElementById('filter-agency').addEventListener('change', renderTable);
+document.getElementById('filter-naics').addEventListener('change', renderTable);
+document.getElementById('filter-setaside').addEventListener('change', renderTable);
+
+// Init
+renderDashboard();
+populateFilters();
+renderTable();
+renderDigest();
 </script>
 </body>
 </html>
