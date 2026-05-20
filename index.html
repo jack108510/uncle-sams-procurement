@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uncle Sam's Procurement</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#1d4ed8;--dark:#0f172a;--card:#1e293b;--accent:#f59e0b;--red:#ef4444;--green:#10b981;--text:#f8fafc;--muted:#94a3b8;--border:#334155}
+body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--primary);text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+.nav{background:var(--card);border-bottom:1px solid var(--border);padding:0 2rem;display:flex;align-items:center;gap:2rem;height:64px;position:sticky;top:0;z-index:100}
+.nav-logo{font-weight:700;font-size:1.15rem;color:var(--text);white-space:nowrap}
+.nav-links{display:flex;gap:0}
+.nav-links a{padding:0 1rem;height:64px;display:flex;align-items:center;color:var(--muted);font-size:.9rem;font-weight:500;border-bottom:2px solid transparent;transition:all .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--text);border-bottom-color:var(--primary)}
+.container{max-width:1200px;margin:0 auto;padding:2rem;width:100%;flex:1}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem}
+.kpi-label{font-size:.8rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.05em}
+.kpi-value{font-size:1.75rem;font-weight:700;margin-top:.25rem}
+.kpi-value.blue{color:var(--primary)}
+.kpi-value.gold{color:var(--accent)}
+.kpi-value.green{color:var(--green)}
+.kpi-value.red{color:var(--red)}
+.section-title{font-size:1.1rem;font-weight:600;margin-bottom:1rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1rem;margin-bottom:2rem}
+.opp-card{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;display:flex;flex-direction:column;gap:.5rem;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.opp-card h3{font-size:.95rem;font-weight:600}
+.opp-card .meta{font-size:.8rem;color:var(--muted)}
+.opp-card .value{font-size:1rem;font-weight:600;color:var(--accent)}
+.opp-card .btn{display:inline-block;margin-top:auto;padding:.4rem .9rem;background:var(--primary);color:var(--text);border:none;border-radius:.4rem;font-size:.8rem;font-weight:500;text-align:center;transition:background .2s}
+.opp-card .btn:hover{background:#2563eb}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem}
+.chart-box{background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.25rem}
+.chart-box h3{font-size:.9rem;font-weight:600;margin-bottom:1rem}
+.bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;font-size:.75rem}
+.bar-label{width:100px;text-align:right;color:var(--muted);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{flex:1;height:22px;background:var(--dark);border-radius:4px;overflow:hidden;position:relative}
+.bar-fill{height:100%;background:var(--primary);border-radius:4px;transition:width .4s;display:flex;align-items:center;padding-left:6px;font-size:.7rem;color:var(--text);font-weight:500;min-width:fit-content}
+.bar-fill.gold{background:var(--accent)}
+.filters{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:1.25rem;align-items:center}
+.filters input,.filters select{background:var(--dark);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;border-radius:.4rem;font-size:.85rem;font-family:inherit}
+.filters input{min-width:220px}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+thead th{text-align:left;padding:.6rem .5rem;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;user-select:none;white-space:nowrap}
+thead th:hover{color:var(--text)}
+tbody tr{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer}
+tbody tr:hover{background:rgba(29,78,216,.1)}
+tbody td{padding:.6rem .5rem;vertical-align:top}
+.expand-row td{padding:0 .5rem .6rem 2rem;color:var(--muted);font-size:.8rem;border-bottom:1px solid var(--border)}
+.btn-sm{padding:.3rem .65rem;background:var(--primary);color:var(--text);border:none;border-radius:.3rem;font-size:.75rem;font-weight:500;transition:background .2s}
+.btn-sm:hover{background:#2563eb}
+.sort-arrow{font-size:.65rem;margin-left:2px;opacity:.5}
+.sort-arrow.active{opacity:1}
+.about-content{max-width:700px}
+.about-content h2{font-size:1.15rem;font-weight:600;margin:1.5rem 0 .5rem}
+.about-content p{color:var(--muted);line-height:1.6;margin-bottom:.75rem}
+.footer{text-align:center;padding:1.5rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--border);margin-top:auto}
+.hidden{display:none!important}
+@media(max-width:768px){
+  .nav{padding:0 1rem;gap:1rem}
+  .nav-logo{font-size:1rem}
+  .nav-links a{padding:0 .6rem;font-size:.8rem}
+  .container{padding:1rem}
+  .charts-grid{grid-template-columns:1fr}
+  .card-grid{grid-template-columns:1fr}
+  .bar-label{width:70px;font-size:.65rem}
+  table{font-size:.75rem}
+  thead th,tbody td{padding:.4rem .3rem}
+  .filters input{min-width:160px}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">Uncle Sam's Procurement</div>
+  <div class="nav-links">
+    <a href="#/" data-nav="dashboard">Dashboard</a>
+    <a href="#/opportunities" data-nav="opportunities">Opportunities</a>
+    <a href="#/about" data-nav="about">About</a>
+  </div>
+</nav>
+
+<div class="container" id="app"></div>
+
+<footer class="footer">Powered by SAM.gov API | Updated daily | 2026 Uncle Sam's Procurement</footer>
+
+<script src="data.js"></script>
+<script>
+const app=document.getElementById('app');
+let sortCol='deadline',sortDir=1;
+
+function $(s,p){return(p||document).querySelector(s)}
+function $$(s,p){return[...(p||document).querySelectorAll(s)]}
+function fmt(n){return n>=1e6?'$'+(n/1e6).toFixed(1)+'M':n>=1e3?'$'+(n/1e3).toFixed(0)+'K':'$'+n}
+function fmtDate(d){if(!d)return'N/A';const dt=new Date(d+'T00:00:00');return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+
+function closingThisWeek(){
+  const now=new Date(),wk=new Date(now.getTime()+7*864e5);
+  return OPPORTUNITIES.filter(o=>{const d=new Date(o.deadline+'T00:00:00');return d>=now&&d<=wk}).length;
+}
+
+function dashboard(){
+  const totalHigh=OPPORTUNITIES.reduce((s,o)=>s+o.value_high,0);
+  const avgVal=OPPORTUNITIES.reduce((s,o)=>s+(o.value_low+o.value_high)/2,0)/OPPORTUNITIES.length;
+  const closing=closingThisWeek();
+
+  // Value range chart data
+  const ranges=[['Under $25K',0,25000],['$25K-$50K',25000,50000],['$50K-$75K',50000,75000],['$75K-$100K',75000,Infinity]];
+  const rangeCounts=ranges.map(([label,lo,hi])=>({label,count:OPPORTUNITIES.filter(o=>o.value_low>=lo&&o.value_low<hi).length}));
+  const maxR=Math.max(...rangeCounts.map(r=>r.count),1);
+
+  // Agency chart data
+  const agencyMap={};
+  OPPORTUNITIES.forEach(o=>{agencyMap[o.agency]=(agencyMap[o.agency]||0)+1});
+  const agencyData=Object.entries(agencyMap).sort((a,b)=>b[1]-a[1]);
+  const maxA=Math.max(...agencyData.map(a=>a[1]),1);
+
+  app.innerHTML=`
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-label">Active Opportunities</div><div class="kpi-value blue">${OPPORTUNITIES.length}</div></div>
+    <div class="kpi"><div class="kpi-label">Total Value</div><div class="kpi-value gold">${fmt(totalHigh)}</div></div>
+    <div class="kpi"><div class="kpi-label">Average Value</div><div class="kpi-value green">${fmt(Math.round(avgVal))}</div></div>
+    <div class="kpi"><div class="kpi-label">Closing This Week</div><div class="kpi-value red">${closing}</div></div>
+  </div>
+  <div class="section-title">Top Opportunities</div>
+  <div class="card-grid">
+    ${DIGEST.map(o=>`
+    <div class="opp-card">
+      <h3>${esc(o.title)}</h3>
+      <div class="meta">${esc(o.agency)} &middot; Deadline: ${fmtDate(o.deadline)}</div>
+      <div class="value">${fmt(o.value_low)} - ${fmt(o.value_high)}</div>
+      <a class="btn" href="${esc(o.url)}" target="_blank">View on SAM.gov</a>
+    </div>`).join('')}
+  </div>
+  <div class="charts-grid">
+    <div class="chart-box">
+      <h3>Opportunities by Value Range</h3>
+      ${rangeCounts.map(r=>`<div class="bar-row"><div class="bar-label">${r.label}</div><div class="bar-track"><div class="bar-fill" style="width:${(r.count/maxR*100).toFixed(1)}%">${r.count}</div></div></div>`).join('')}
+    </div>
+    <div class="chart-box">
+      <h3>Opportunities by Agency</h3>
+      ${agencyData.map(([name,count])=>`<div class="bar-row"><div class="bar-label" title="${esc(name)}">${esc(name)}</div><div class="bar-track"><div class="bar-fill gold" style="width:${(count/maxA*100).toFixed(1)}%">${count}</div></div></div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function opportunities(){
+  const agencies=[...new Set(OPPORTUNITIES.map(o=>o.agency))].sort();
+  const naics=[...new Set(OPPORTUNITIES.map(o=>o.naics))].sort();
+  const setasides=[...new Set(OPPORTUNITIES.filter(o=>o.setaside).map(o=>o.setaside))].sort();
+
+  app.innerHTML=`
+  <h2 style="margin-bottom:1rem">All Opportunities</h2>
+  <div class="filters">
+    <input type="text" id="search" placeholder="Search title, agency, NAICS...">
+    <select id="f-agency"><option value="">All Agencies</option>${agencies.map(a=>`<option>${esc(a)}</option>`).join('')}</select>
+    <select id="f-naics"><option value="">All NAICS</option>${naics.map(n=>`<option>${n}</option>`).join('')}</select>
+    <select id="f-setaside"><option value="">All Set-Asides</option>${setasides.map(s=>`<option>${esc(s)}</option>`).join('')}</select>
+    <select id="f-value"><option value="">Any Value</option><option value="0-25000">Under $25K</option><option value="25000-50000">$25K-$50K</option><option value="50000-75000">$50K-$75K</option><option value="75000-999999">$75K+</option></select>
+  </div>
+  <div style="overflow-x:auto">
+  <table>
+    <thead><tr>
+      <th data-col="title">Title <span class="sort-arrow" id="sa-title">&#9650;</span></th>
+      <th data-col="agency">Agency <span class="sort-arrow" id="sa-agency">&#9650;</span></th>
+      <th data-col="value_high">Value <span class="sort-arrow" id="sa-value_high">&#9650;</span></th>
+      <th data-col="posted">Posted <span class="sort-arrow" id="sa-posted">&#9650;</span></th>
+      <th data-col="deadline">Deadline <span class="sort-arrow" id="sa-deadline">&#9650;</span></th>
+      <th data-col="naics">NAICS <span class="sort-arrow" id="sa-naics">&#9650;</span></th>
+      <th data-col="setaside">Set-Aside</th>
+      <th></th>
+    </tr></thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  </div>`;
+  renderTable();
+
+  $('#search').addEventListener('input',renderTable);
+  ['f-agency','f-naics','f-setaside','f-value'].forEach(id=>$('#'+id).addEventListener('change',renderTable));
+  $$('thead th[data-col]').forEach(th=>th.addEventListener('click',()=>{
+    const c=th.dataset.col;
+    if(sortCol===c)sortDir*=-1;else{sortCol=c;sortDir=1}
+    renderTable();
+  }));
+}
+
+function renderTable(){
+  const search=$('#search').value.toLowerCase();
+  const fAgency=$('#f-agency').value;
+  const fNaics=$('#f-naics').value;
+  const fSet=$('#f-setaside').value;
+  const fVal=$('#f-value').value;
+
+  let data=OPPORTUNITIES.filter(o=>{
+    if(search&&![o.title,o.agency,o.naics,o.naics_desc,o.description].some(s=>s&&s.toLowerCase().includes(search)))return false;
+    if(fAgency&&o.agency!==fAgency)return false;
+    if(fNaics&&o.naics!==fNaics)return false;
+    if(fSet&&o.setaside!==fSet)return false;
+    if(fVal){const[lo,hi]=fVal.split('-').map(Number);if(o.value_high<lo||o.value_low>hi)return false}
+    return true;
+  });
+
+  data.sort((a,b)=>{
+    let va=a[sortCol],vb=b[sortCol];
+    if(typeof va==='string')return va.localeCompare(vb)*sortDir;
+    return(va-vb)*sortDir;
+  });
+
+  // Update sort arrows
+  $$('thead th[data-col]').forEach(th=>{
+    const arrow=$(`#sa-${th.dataset.col}`);
+    if(!arrow)return;
+    arrow.classList.toggle('active',th.dataset.col===sortCol);
+    arrow.textContent=th.dataset.col===sortCol?(sortDir===1?'\u25B2':'\u25BC'):'\u25B2';
+  });
+
+  $('#tbody').innerHTML=data.map(o=>`
+    <tr data-id="${o.id}">
+      <td><strong>${esc(o.title)}</strong></td>
+      <td>${esc(o.agency)}</td>
+      <td>${fmt(o.value_low)} - ${fmt(o.value_high)}</td>
+      <td>${fmtDate(o.posted)}</td>
+      <td>${fmtDate(o.deadline)}</td>
+      <td>${o.naics}</td>
+      <td>${o.setaside?esc(o.setaside):'--'}</td>
+      <td><a class="btn-sm" href="${esc(o.url)}" target="_blank">View</a></td>
+    </tr>
+    <tr class="expand-row hidden" id="exp-${o.id}"><td colspan="8">${esc(o.description)}</td></tr>
+  `).join('');
+
+  $$('#tbody tr[data-id]').forEach(tr=>tr.addEventListener('click',e=>{
+    if(e.target.closest('.btn-sm'))return;
+    const exp=$(`#exp-${tr.dataset.id}`);
+    exp.classList.toggle('hidden');
+  }));
+}
+
+function about(){
+  app.innerHTML=`
+  <div class="about-content">
+    <h1 style="font-size:1.5rem;font-weight:700;margin-bottom:.25rem">About Uncle Sam's Procurement</h1>
+    <p style="color:var(--accent);margin-bottom:1.5rem">Government contracts, simplified.</p>
+    <p>Uncle Sam's Procurement is a daily-updated dashboard that surfaces active federal contracting opportunities from SAM.gov. It is designed for small businesses looking to break into government contracting without wading through complex procurement portals.</p>
+    <h2>How It Works</h2>
+    <p>Each day, our scraper pulls the latest opportunities from the SAM.gov API, filters for contracts under $100,000, and presents them in a clean, searchable interface. You can filter by agency, NAICS code, set-aside type, and value range to find the contracts that match your capabilities.</p>
+    <h2>Daily Updates</h2>
+    <p>Data is refreshed automatically every 24 hours. The "Closing This Week" indicator helps you prioritize time-sensitive bids. Last updated: ${fmtDate(LAST_UPDATED.split('T')[0])}.</p>
+    <h2>Data Source</h2>
+    <p>All opportunity data is sourced directly from the <a href="https://sam.gov" target="_blank" style="color:var(--primary)">SAM.gov</a> API (System for Award Management), the official U.S. government system for federal procurement.</p>
+    <h2>Disclaimer</h2>
+    <p>This tool is not affiliated with or endorsed by the U.S. federal government. Always verify opportunity details on SAM.gov before submitting bids.</p>
+  </div>`;
+}
+
+function route(){
+  const h=location.hash||'#/';
+  $$('.nav-links a').forEach(a=>{
+    a.classList.toggle('active',
+      (h==='#/'&&a.dataset.nav==='dashboard')||
+      (h==='#/opportunities'&&a.dataset.nav==='opportunities')||
+      (h==='#/about'&&a.dataset.nav==='about')
+    );
+  });
+  if(h==='#/opportunities')opportunities();
+  else if(h==='#/about')about();
+  else dashboard();
+}
+
+window.addEventListener('hashchange',route);
+route();
+</script>
+</body>
+</html>
